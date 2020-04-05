@@ -62,10 +62,9 @@ gen_interface()
 	is_yes $OPENOCD_NEEDS_SUDO && oocmd="sudo "
 	oocmd+=$OPENOCD_PATH
 	echo "oocmd=\"$oocmd\"" >> oomf_env.sh
-	ooargs+=" -s $OPENOCD_SCRIPTS_ROOT "
+	[[ -d $OPENOCD_SCRIPTS_ROOT ]] && ooargs+=" -s $OPENOCD_SCRIPTS_ROOT "
 	[[ -d "$PROJECTDIR/cfg" ]] && ooargs+=" -s $PROJECTDIR/cfg "
 	ooargs+=$OPENOCD_ARGS
-	echo $ooargs
 	echo "ooargs=\"$ooargs\"" >> oomf_env.sh
 	popd > /dev/null
 }
@@ -106,6 +105,6 @@ echo "Running: $wscmd"
 echo
 
 trap shutdown INT TERM ERR EXIT
-$GUI_OPEN "http://127.0.0.1:$WSD_PORT"
 
+$GUI_OPEN "http://127.0.0.1:$WSD_PORT" 2> /dev/null
 $wscmd 
